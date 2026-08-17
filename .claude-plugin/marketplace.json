@@ -1,0 +1,14 @@
+{
+  "name": "breakthrough",
+  "description": "Draft outreach, research calls, and answer questions using your Breakthrough sales data.",
+  "owner": {
+    "name": "Breakthrough Engineering"
+  },
+  "plugins": [
+    {
+      "name": "breakthrough",
+      "source": "./",
+      "description": "Draft outreach, research calls, and answer questions using your Breakthrough sales data."
+    }
+  ]
+}
