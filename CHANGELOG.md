@@ -4,14 +4,48 @@ All notable changes to this plugin are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 [Semantic Versioning](https://semver.org/).
 
-Add your entry under `## [Unreleased]` in the same PR as your change, using one of:
-`### Added`, `### Changed`, `### Fixed`, `### Security`, `### Breaking`. Then run
-`scripts/bump_plugin_version.sh` to bump `plugin.json`'s version and stamp the release —
-`### Added`/`### Changed` bump minor, `### Fixed`/`### Security` bump patch, and
-`### Breaking` bumps major. CI fails the PR if `plugins/breakthrough/` changes without a
-changelog entry, or if `plugin.json`'s version doesn't match what `[Unreleased]` implies.
-
 ## [Unreleased]
+
+## [1.1.0] - 2026-09-03
+
+### Changed
+
+- Expanded the guidance for `sales_playbook` so it is reached in the cases where it
+  helps. It is now described as covering the org's playbook family, including a
+  separate partnership playbook where one exists, and skills are told to call it
+  before drafting anything a prospect or partner will read rather than only when a
+  question is explicitly about methodology.
+
+### Fixed
+
+- `gather-context` told Claude to skip retrieval entirely for a request with no
+  contact, company, or call in it. That skipped the playbook too, which is exactly
+  what such a request needs — the playbook is org-level guidance and needs no
+  entity. Entity lookups are still skipped; the playbook step no longer is.
+
+## [1.0.0] - 2026-09-03
+
+### Breaking
+
+- Renamed the bundled MCP server from `api` to `breakthrough`. It is now identifiable in
+  the connector list and in tool names. Any saved tool-permission rules referring to the
+  old name need to be re-approved once.
+
+### Changed
+
+- Rewrote the install instructions. They now cover the two paths that actually exist —
+  adding the marketplace in Claude Desktop / claude.ai, and the Claude Code CLI — and
+  state that a marketplace is added per account rather than shared across a company.
+
+### Fixed
+
+- Added the `humanize` skill to the skill table. It shipped in 0.5.0 but was never listed.
+- Documented that skill command names are unprefixed on Claude Desktop and claude.ai, and
+  namespaced (`/breakthrough:<skill>`) only in Claude Code.
+- Corrected the 0.2.0 entry below, which named a tool that was never released under that
+  name.
+- Pointed the manifest's repository link at this repository instead of a private one, and
+  declared the license.
 
 ## [0.5.0] - 2026-08-12
 
@@ -47,10 +81,11 @@ changelog entry, or if `plugin.json`'s version doesn't match what `[Unreleased]`
 
 ### Added
 
-- `my_profile` MCP tool with LinkedIn background context.
+- The caller's own LinkedIn background, as `whoami(detail="full")`. (This entry
+  originally announced a separate `my_profile` tool; no such tool shipped.)
 
 ## [0.1.0] - 2026-08-12
 
 ### Added
 
-- Initial release of the Breakthrough Claude Code plugin.
+- Initial release of the Breakthrough Claude plugin.

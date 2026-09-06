@@ -107,9 +107,37 @@ Fetches one transcript by integer ID.
 
 ### `sales_playbook(latest_user_message, conversation_history=None)`
 
-Returns the playbook sections relevant to the current message, rather than the whole
-playbook. `latest_user_message` is the user's current message; `conversation_history` is
-the prior context, if any.
+Returns the sections of this org's playbook relevant to the current message, rather than
+the whole playbook. `latest_user_message` is the user's current message, passed
+**verbatim** — summarizing loses the signal the selector keys on. `conversation_history`
+is the prior context, if any; worth passing on later turns, since it is often what
+disambiguates a short follow-up like "make it shorter" or "what about for a partner?".
+
+**This is the highest-value tool here.** It is what makes an answer specific to this
+company rather than generic sales advice. Call it liberally: retrieval is cheap, it
+returns only matching sections, and an empty result costs nothing.
+
+Call it whenever:
+
+- The user asks how to handle, approach, position, pitch, frame, or sell something.
+- **You are about to draft anything a prospect or partner will read** — email, LinkedIn
+  message, proposal, follow-up, recap. Call it *before* writing, so the draft carries
+  this org's positioning and language. Do this even when the user never mentions the
+  playbook.
+- The user asks what the company does, what makes it different, what its value or
+  elevator pitch is, or how to explain it to a particular audience.
+- The user asks for discovery questions, talk tracks, next steps, or how to move a deal
+  forward.
+- The user asks about a competitor, pricing, packaging, or a business case.
+- The user asks about partnerships, channel, or co-selling. Some orgs keep a separate
+  partnership playbook and this tool selects across all of them, so ask it for
+  partner-motion questions exactly as you would for direct-sales ones.
+
+When in doubt, call it. The common failure is not calling it and producing advice that
+could have been written about any company.
+
+Not for facts about a specific person or company (`contact_profile` /
+`business_profile`), or for what was said on a call (`search_transcripts`).
 
 ## Mutating tools
 

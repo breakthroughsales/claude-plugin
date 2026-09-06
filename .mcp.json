@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "api": {
+    "breakthrough": {
       "type": "http",
       "url": "https://mcp.breakthroughsales.io/mcp"
     }

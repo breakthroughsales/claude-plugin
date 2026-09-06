@@ -18,7 +18,7 @@ Wraps the `import_contact` MCP tool.
 
 ## Before calling
 
-**Check whether they already exist.** Run `/breakthrough:find-contact` first. Importing
+**Check whether they already exist.** Run the find-contact skill first. Importing
 someone already in the CRM enqueues enrichment work for nothing and can create a
 duplicate the user then has to clean up.
 

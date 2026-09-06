@@ -93,9 +93,15 @@ Do **not** use it when:
 5. **`sales_playbook(latest_user_message, conversation_history)`** — retrieve the
    playbook sections relevant to this message.
 
-Steps 3–5 are conditional on what step 2 returns. A prompt with no entity signal
-("what's a good subject line pattern?") should skip straight to the output contract
-rather than firing retrieval calls that will come back empty.
+Steps 3 and 4 are conditional on what step 2 returns. A prompt with no entity signal
+("what's a good subject line pattern?") has nothing to resolve, so skip those lookups
+rather than firing calls that come back empty.
+
+**Step 5 is not conditional on step 2.** The playbook is org-level guidance and does not
+need an entity — a prompt with no entity signal is often precisely the one the playbook
+answers. Call `sales_playbook` for any request that turns on how this company sells,
+including before drafting anything a prospect or partner will read. Skip it only for a
+bare record lookup or a straight read-back of what was said on a call.
 
 ## Grounding
 

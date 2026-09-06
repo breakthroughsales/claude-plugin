@@ -45,10 +45,16 @@ conversation so far.
 
 ## When to stop early
 
-Steps 3–5 are conditional on step 2. A request with no entity signal — "what's a good
-subject line pattern?" — should skip retrieval entirely rather than firing calls that
-come back empty. Retrieving nothing and retrieving nothing *useful* look the same in the
-output but cost the user latency.
+Steps 3 and 4 are conditional on step 2. A request with no entity signal — "what's a
+good subject line pattern?" — has no contact, business, or call to resolve, so skip
+those rather than firing lookups that come back empty. Retrieving nothing and retrieving
+nothing *useful* look the same in the output but cost the user latency.
+
+**Step 5 is not conditional.** The playbook is org-level guidance, so it is exactly
+what a question with no entity signal needs — "what's a good subject line pattern?" is
+answered by this org's playbook, not by a generic one. Skip `sales_playbook` only when
+the request turns on no guidance at all: a bare record lookup, or reading back what was
+said on a call.
 
 ## Reporting
 

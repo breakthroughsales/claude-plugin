@@ -40,4 +40,4 @@ means writing to the wrong one.
 **If nothing resolves, say so plainly.** "No contact matching that in Breakthrough" is
 the useful answer. Do not fall back to a web search and present what you find as if it
 came from the CRM; the user asked what *they* have on file. Offer the import path
-(`/breakthrough:import-contact`) if a LinkedIn URL or email is available.
+(the import-contact skill) if a LinkedIn URL or email is available.

@@ -51,7 +51,7 @@ that enqueued nothing.
 | `needs_confirmation` | One contact resolved, but from an **implicit** signal | **Stop and ask the user before refreshing.** Show which contact you matched. Do not call again until they confirm. |
 | `ambiguous` | Several candidates matched | Present the candidates and ask which. Do not pick one. |
 | `no_linkedin_url` | Contact found, but no stored URL to re-enrich from | Report it. Retrying will not help. |
-| `no_match` | Nothing resolved | Report it. Offer `/breakthrough:import-contact` if they have a URL or email. |
+| `no_match` | Nothing resolved | Report it. Offer the import-contact skill if they have a URL or email. |
 
 ### Why `needs_confirmation` exists
 
