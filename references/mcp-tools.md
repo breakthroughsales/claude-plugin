@@ -105,7 +105,7 @@ Fetches one transcript by integer ID.
 - `include_structured=True` — adds `transcript_sentences` with per-sentence timing and
   speaker structure. Only meaningful with `format="full"`.
 
-### `sales_playbook(latest_user_message, conversation_history=None)`
+### `sales_playbook(latest_user_message, conversation_history=None, context_hint=None, call_transcript_ids=None, business_ids=None)`
 
 Returns the sections of this org's playbook relevant to the current message, rather than
 the whole playbook. `latest_user_message` is the user's current message, passed
@@ -135,6 +135,28 @@ Call it whenever:
 
 When in doubt, call it. The common failure is not calling it and producing advice that
 could have been written about any company.
+
+**Carry over what you already know.** An org can run more than one playbook — typically a
+sales playbook for selling directly to a buyer and a partnership playbook for working
+through a partner — and a question like "what should I cover on this call?" does not say
+which motion is in play. Three optional arguments settle it:
+
+- `context_hint` — a short phrase describing the conversation when the question alone
+  does not ("partner conversation with a CTV platform", "direct sales discovery call").
+- `call_transcript_ids` — ids of the calls the question is about, if you already resolved
+  them via `resolve_prompt_context` or `search_transcripts`. Their names and
+  sales/partnership labels are a stronger signal than a freeform hint, and this is the
+  most reliable way to land on the right playbook.
+- `business_ids` — ids of the businesses the question is about, used the same way.
+
+Without any of these, a vague question on a multi-playbook org can match nothing and come
+back `skipped: no_rendered_content`. If that happens, retry ONCE with whatever of the
+three you have, and do not retry again after that. Orgs with a single playbook ignore all
+three.
+
+The result may also carry a `clarification` field: the motion was not determined, the
+sections returned are the ones that hold either way, so use them and then ask the user
+that question rather than picking a motion silently.
 
 Not for facts about a specific person or company (`contact_profile` /
 `business_profile`), or for what was said on a call (`search_transcripts`).

@@ -6,6 +6,21 @@ All notable changes to this plugin are documented here. Format follows
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-09-06
+
+### Added
+
+- `sales_playbook` takes three optional arguments for saying what the conversation is
+  about: `context_hint`, `call_transcript_ids` and `business_ids`. They matter on orgs
+  that run more than one playbook — a sales playbook and a partnership playbook — where
+  a question like "what should I cover on this call?" does not say which motion applies.
+  Without them such a question could match nothing and come back
+  `skipped: no_rendered_content`, leaving the answer with no playbook behind it and no
+  sign anything was missing. Orgs with a single playbook ignore all three.
+- The result can now carry a `clarification` field: the motion was not determined, the
+  sections returned are the ones that hold under either motion, so use them and then ask
+  the user that question rather than picking a motion silently.
+
 ## [1.1.0] - 2026-09-03
 
 ### Changed
