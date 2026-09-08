@@ -1,6 +1,6 @@
 {
   "name": "breakthrough",
-  "description": "Draft outreach, research calls, and answer questions using your Breakthrough sales data.",
+  "description": "Connects Claude to a living playbook distilled from your sales calls, so it always has the right context and knows what works best across your organization, without you having to manage any of it yourself.",
   "owner": {
     "name": "Breakthrough"
   },
@@ -8,8 +8,8 @@
     {
       "name": "breakthrough",
       "source": "./",
-      "description": "Draft outreach, research calls, and answer questions using your Breakthrough sales data.",
-      "version": "0.10.1"
+      "description": "Connects Claude to a living playbook distilled from your sales calls, so it always has the right context and knows what works best across your organization, without you having to manage any of it yourself.",
+      "version": "0.10.2"
     }
   ]
 }

@@ -11,6 +11,15 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-09-08
+
+### Changed
+
+- Marketplace listing and manifest description rewritten: the plugin connects Claude to
+  a living playbook distilled from your sales calls, so it has the right context and
+  knows what works across your organization. Listing copy only; no behavior change,
+  hence a patch version rather than the minor bump a `### Changed` entry normally takes.
+
 ## [0.10.1] - 2026-09-08
 
 ### Fixed
