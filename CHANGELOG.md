@@ -11,6 +11,14 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.9.2] - 2026-09-08
+
+### Fixed
+
+- The marketplace manifest now declares the plugin version, so claude.ai and Claude
+  Code can see that a new release exists. Without it, a marketplace added on claude.ai
+  stayed on the version from the day it was added.
+
 ## [0.9.1] - 2026-09-08
 
 ### Fixed
