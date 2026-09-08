@@ -4,9 +4,21 @@ All notable changes to this plugin are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 [Semantic Versioning](https://semver.org/).
 
+The plugin is pre-release: versions stay `0.X.Y` — `### Added` / `### Changed` /
+`### Breaking` bump X, `### Fixed` / `### Security` bump Y — until the 1.0.0 release is
+cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
+2026-09-03/08 and renumbered to 0.6.0–0.9.0 on 2026-09-08.)
+
 ## [Unreleased]
 
-## [1.3.0] - 2026-09-08
+## [0.9.1] - 2026-09-08
+
+### Fixed
+
+- The publisher shown in claude.ai and Claude Code is now "Breakthrough" rather than
+  "Breakthrough Engineering" (marketplace owner and plugin author).
+
+## [0.9.0] - 2026-09-08
 
 ### Changed
 
@@ -23,7 +35,7 @@ All notable changes to this plugin are documented here. Format follows
   call per question either way.
 
 
-## [1.2.0] - 2026-09-06
+## [0.8.0] - 2026-09-06
 
 ### Added
 
@@ -38,7 +50,7 @@ All notable changes to this plugin are documented here. Format follows
   sections returned are the ones that hold under either motion, so use them and then ask
   the user that question rather than picking a motion silently.
 
-## [1.1.0] - 2026-09-03
+## [0.7.0] - 2026-09-03
 
 ### Changed
 
@@ -55,7 +67,7 @@ All notable changes to this plugin are documented here. Format follows
   what such a request needs — the playbook is org-level guidance and needs no
   entity. Entity lookups are still skipped; the playbook step no longer is.
 
-## [1.0.0] - 2026-09-03
+## [0.6.0] - 2026-09-03
 
 ### Breaking
 
