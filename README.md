@@ -1,7 +1,6 @@
 # Breakthrough for Claude
 
-Draft outreach, research calls, and answer questions using your Breakthrough sales
-data — contacts, accounts, call transcripts, and your organization's sales playbook.
+Connects Claude to a living playbook distilled from your sales calls, so it always has the right context and knows what works best across your organization, without you having to manage any of it yourself.
 
 Everything is scoped to your own Breakthrough organization. The plugin reads your data;
 it never posts, sends, or publishes anything on your behalf.

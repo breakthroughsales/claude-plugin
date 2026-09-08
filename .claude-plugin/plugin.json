@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "breakthrough",
   "displayName": "Breakthrough",
-  "version": "0.10.1",
-  "description": "Draft outreach, research calls, and answer questions using your Breakthrough contacts, accounts, call transcripts, and sales playbook.",
+  "version": "0.10.2",
+  "description": "Connects Claude to a living playbook distilled from your sales calls, so it always has the right context and knows what works best across your organization, without you having to manage any of it yourself.",
   "author": {
     "name": "Breakthrough"
   },
