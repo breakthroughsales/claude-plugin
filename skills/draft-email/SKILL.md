@@ -24,6 +24,13 @@ when_to_use: >-
 email to a contact you haven't resolved is a guess — resolve them, read the calls, pull
 the playbook.
 
+If the email is about a call ("thanks for your time on our call", a follow-up to the
+demo, "as we discussed"), open that transcript with `call_transcript_conversation`
+before drafting; the context map's **OPEN THE CALL** recommendation names it. Listing
+the call with `contact_transcripts_list` is not reading it, and `<PastCallNotes>` are a
+digest, not the call. The native app hands the model the whole transcript here; an email
+written from the notes instead is the gap this rule closes.
+
 **2. Apply the voice rules** in `${CLAUDE_PLUGIN_ROOT}/references/context-assembly.md`.
 These matter more here than anywhere else: cold email is where AI phrasing is most
 obvious and most costly. The system prompt names the offenders — "I noticed…", "Given

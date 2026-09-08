@@ -11,6 +11,26 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-09-08
+
+### Changed
+
+- `resolve_prompt_context` now flags a first name that matches several people
+  (`clarification_needed`, `ambiguous_names` with each candidate's calls on record)
+  and its first recommendation says ask, do not pick. The gather-context skill stops
+  and asks on that flag instead of guessing the person with the most calls.
+- `call_transcript_conversation` returns long transcripts in parts of 60,000
+  characters (`part`, `parts`, `next_part`, `total_chars`) and no longer duplicates the
+  raw text beside the tag-wrapped copy unless `include_structured` is set. Single
+  results of 94-163KB overflowed the client's tool-result cap and the call went unread.
+- `resolve_prompt_context` sets `call_reference` when the prompt talks about a call
+  ("our call", "my last call", "the demo") and recommends the exact transcript(s) to
+  open; a full name in the prompt ("Ben Beal") is not flagged as ambiguous just because
+  the first name alone matches several people.
+- gather-context, draft-email, and draft-linkedin-message open the call when the
+  request is about it (a thank-you, a follow-up to the demo) and read every part
+  before writing; the stored call notes are a digest, not the transcript.
+
 ## [0.9.2] - 2026-09-08
 
 ### Fixed

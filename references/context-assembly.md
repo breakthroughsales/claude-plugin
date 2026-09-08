@@ -90,6 +90,15 @@ Do **not** use it when:
    `call_transcript_conversation`** — pull evidence. `format="summary"` when scanning
    several calls, `format="full"` for one deep dive.
 
+   **When the request refers to a call** ("our call", "my last call", "the demo", a
+   thank-you or follow-up for it), open that transcript with
+   `call_transcript_conversation` before you write. The map flags this
+   (`call_reference: true`) and its **OPEN THE CALL** recommendation names the call.
+   Listing the call with `contact_transcripts_list` is not reading it, and
+   `<PastCallNotes>` on the contact are a digest, not the call: the native app hands the
+   model the whole transcript here, and drafting from the notes instead is the gap. A
+   long transcript arrives in parts; keep calling with `next_part` until it is null.
+
 5. **`sales_playbook(latest_user_message, conversation_history)`** — retrieve the
    playbook sections relevant to this message.
 

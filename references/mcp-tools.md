@@ -53,6 +53,9 @@ Returns a context map:
 - `matched_transcripts_by_name` — `[{"pattern": ..., "count": N}, ...]`
 - matched contacts and businesses, cross-referenced against each other
 - `recommendations` — concrete next tool calls
+- `call_reference` / `all_calls` (the prompt talks about a call, so a recommendation says which transcript(s) to open), `clarification_needed` / `ambiguous_names` — set when a name token matches more than
+  one person; each candidate carries `transcript_count`. Ask the user which one; do not
+  pick, even if only one has calls on record.
 
 **Follow `recommendations` unless you have a specific reason not to.** They are generated
 from real counts against this org's data, so they encode what actually exists
@@ -94,12 +97,14 @@ Semantic + keyword search across the org's call transcripts.
 Only these four fields are filterable. Inventing a field name produces an error, not an
 ignored clause.
 
-### `call_transcript_conversation(transcript_id, include_structured=False, format="full")`
+### `call_transcript_conversation(transcript_id, include_structured=False, format="full", part=1)`
 
 Fetches one transcript by integer ID.
 
-- `format="full"` (default) — full raw transcript plus a tag-wrapped `llm_string`. Use
-  for a single deep dive.
+- `format="full"` (default) — the tag-wrapped `llm_string`, in parts of 60,000
+  characters. The response carries `part`, `parts` and `next_part`; call again with
+  `part=next_part` until it is null. Use for a single deep dive, and whenever the request
+  is about what was said on one specific call.
 - `format="summary"` — thematic summary only. Use when scanning several calls; pulling
   several transcripts at `full` will bury the actual question in raw text.
 - `include_structured=True` — adds `transcript_sentences` with per-sentence timing and

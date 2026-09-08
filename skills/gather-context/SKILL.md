@@ -32,13 +32,29 @@ The response carries a `recommendations` array generated from real counts agains
 org's data. **Follow it unless you have a specific reason not to.** It knows
 what exists in scope; the prompt text does not.
 
+**If the response says `clarification_needed: true`, stop and ask.** A first name that
+matches several people ("Ben", "Andre", "Marco") is a question for the user, not a
+guess for you — even when only one of them has calls on record. Reply with the
+candidates from `ambiguous_names` (name, company, calls on record) and nothing else; do
+not resolve, draft, or answer until the user says which person they mean. The native
+app never has to guess here because the user attached the record; asking is how this
+surface gets the same certainty.
+
 **3. Detail.** For entities the map surfaced, call `contact_profile` and
 `business_profile`.
 
 **4. Evidence.** Pull transcripts with `search_transcripts`,
 `contact_transcripts_list`, or `call_transcript_conversation`. Use `format="summary"`
 when scanning several calls — pulling multiple transcripts at `format="full"` buries the
-question in raw text. Use `format="full"` for a single deep dive.
+question in raw text. Use `format="full"` for a single deep dive, and when the request
+turns on what was said on one call (a summary of it, notes from it, a follow-up to it,
+a thank-you for it), open that call — the native app hands the whole transcript to the
+model, and answering from the stored notes instead is the gap. A long transcript comes
+back in parts: the response carries `parts` and `next_part`; keep calling with the next
+`part` until `next_part` is null before you summarize or extract anything from it.
+`resolve_prompt_context` marks this for you: when the map says `call_reference: true`
+its recommendations name the exact calls to open (`**OPEN THE CALL**`). Follow that before
+you write anything; stored notes are not the transcript.
 
 **5. Playbook.** Call `sales_playbook` with the user's current message and the
 conversation so far.
