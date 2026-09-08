@@ -32,7 +32,9 @@ The response carries a `recommendations` array generated from real counts agains
 org's data. **Follow it unless you have a specific reason not to.** It knows
 what exists in scope; the prompt text does not.
 
-**If the response says `clarification_needed: true`, stop and ask.** A first name that
+**If the response says `clarification_needed: true`, stop and ask.** (When the map lists
+`ambiguous_names` without that flag, the request's target resolved elsewhere: proceed with
+it and do not pick one of the listed people.) A first name that
 matches several people ("Ben", "Andre", "Marco") is a question for the user, not a
 guess for you — even when only one of them has calls on record. Reply with the
 candidates from `ambiguous_names` (name, company, calls on record) and nothing else; do
@@ -52,9 +54,8 @@ a thank-you for it), open that call — the native app hands the whole transcrip
 model, and answering from the stored notes instead is the gap. A long transcript comes
 back in parts: the response carries `parts` and `next_part`; keep calling with the next
 `part` until `next_part` is null before you summarize or extract anything from it.
-`resolve_prompt_context` marks this for you: when the map says `call_reference: true`
-its recommendations name the exact calls to open (`**OPEN THE CALL**`). Follow that before
-you write anything; stored notes are not the transcript.
+When a resolved person has calls on record, the map's **CALLS ON RECORD** recommendation
+names the exact next step; follow it whenever the request is about a call with them.
 
 **5. Playbook.** Call `sales_playbook` with the user's current message and the
 conversation so far.

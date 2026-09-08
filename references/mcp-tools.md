@@ -53,7 +53,13 @@ Returns a context map:
 - `matched_transcripts_by_name` — `[{"pattern": ..., "count": N}, ...]`
 - matched contacts and businesses, cross-referenced against each other
 - `recommendations` — concrete next tool calls
-- `call_reference` / `all_calls` (the prompt talks about a call, so a recommendation says which transcript(s) to open), `clarification_needed` / `ambiguous_names` — set when a name token matches more than
+- `mentions` / `mention_source` — the people, companies, and calls the request names, as
+  read by a small model (`mention_source: "model"`); only those are searched. If that read
+  fails the tool falls back to probing each word (`"fallback"`).
+- `matched_transcripts_by_title` — when the request names a call, the transcripts whose
+  title matches that mention (id, name, date, participants), with the query shown so a
+  generic mention ("our call") can be judged.
+- `clarification_needed` / `ambiguous_names` — set when a name token matches more than
   one person; each candidate carries `transcript_count`. Ask the user which one; do not
   pick, even if only one has calls on record.
 
@@ -78,7 +84,10 @@ via `contact_profile` or `resolve_prompt_context` first. Returns no transcript b
 ### `search_transcripts(query="", limit=20, filter_by="", sort_by="")`
 
 Semantic + keyword search across the org's call transcripts.
-
+  Set only when the shared name is the request's only handle. When something else in the
+  request resolved (a full name, a company, a call found by title), `ambiguous_names`
+  still lists the candidates but the recommendation says to proceed with the resolved
+  target and not to pick one of them.
 - `query` — search text (`"pricing"`, `"SOC2 timeline"`). Leave empty to browse without
   relevance ranking.
 - `limit` — 1–50, default 20.

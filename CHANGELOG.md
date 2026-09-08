@@ -11,6 +11,24 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-09-08
+
+### Fixed
+
+- A shared first name blocks with a clarifying question only when it is the request's
+  only handle. "Email Gianluca Peretti … tie it to Alex's directive" proceeds with
+  Gianluca; the map still lists the Alexes and says not to pick one. A call the request
+  names is searched by title (`matched_transcripts_by_title`) and recommended directly.
+- `resolve_prompt_context` now has a small model read the request for the people and
+  companies it names, and searches only those (`mentions`, `mention_source`). Before, every
+  word was probed against the index, so "write a short email thanking Ioanna" surfaced a
+  Tim Short on the word "short". The per-word probe remains as a fallback.
+- `resolve_prompt_context` no longer guesses from wording whether a prompt refers to a
+  past call; it reports the resolved person's calls on record (**CALLS ON RECORD**) and
+  leaves that judgment to the model. A company or surname qualifier ("Ben at
+  Splashtop") resolves a shared first name through an org-scoped lookup, and the
+  calls-on-record counts include calls imported by colleagues.
+
 ## [0.10.0] - 2026-09-08
 
 ### Changed
