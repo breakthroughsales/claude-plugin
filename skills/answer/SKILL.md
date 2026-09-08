@@ -1,18 +1,23 @@
 ---
 name: answer
 description: >-
-  Answers questions about a prospect, account, deal, or call that need reasoning across
-  the user's Breakthrough sales data (contacts, companies, recorded call transcripts,
-  and a sales playbook) rather than a single lookup. The fallback for any Breakthrough
-  request that isn't a record lookup or a written artifact.
+  Answers any sales question for this user's company: how we sell, what we charge, how
+  we position, what to ask a buyer, how to handle an objection, how we compare to a
+  competitor, what to do next on a deal — plus open-ended questions about a prospect,
+  account, or call. Answers come from the company's own playbook and sales data
+  (contacts, companies, call transcripts), which only this skill can reach. The
+  fallback for any Breakthrough request that isn't a record lookup or a written artifact.
 when_to_use: >-
-  Use for open-ended questions about an account, person, or deal — "what do we know
-  about them", "should we chase this", "how do I handle the pricing objection", "how do
-  we position against X", "what should I do next here", "help me prep for this call".
-  Do NOT use to pull up one person or company record; that is find-contact or
-  find-business. Do NOT use for "what did they say on the call"; that is
-  research-transcripts. Do NOT use when the user wants something written to send or
-  save; that is draft-email, draft-linkedin-message, or draft-note.
+  Use for ANY question about selling that the user's company would answer differently
+  from a generic one — even when no person, company, or call is named: "what's our
+  pricing", "give me 3 discovery questions for a CFO", "how do I handle the pricing
+  objection", "how do we position against X", "what's our elevator pitch", "what should
+  I do next here", "help me prep for this call", "should we chase this". The company
+  keeps a playbook for exactly these; answering them from general sales knowledge is
+  the failure this skill exists to prevent. Do NOT use to pull up one person or company
+  record; that is find-contact or find-business. Do NOT use for "what did they say on
+  the call"; that is research-transcripts. Do NOT use when the user wants something
+  written to send or save; that is draft-email, draft-linkedin-message, or draft-note.
 ---
 
 # Answer a question
@@ -21,12 +26,24 @@ The default for questions, general chat, brainstorming, and explanations.
 
 ## Steps
 
-**1. Gather context** when the question touches a person, company, or call the user
-knows: follow `${CLAUDE_PLUGIN_ROOT}/skills/gather-context/SKILL.md`.
+**1. Entities — only when named.** When the question touches a person, company, or
+call the user knows, follow `${CLAUDE_PLUGIN_ROOT}/skills/gather-context/SKILL.md` in
+full. Its last step calls `sales_playbook` with the ids it just resolved — that is the
+playbook step for this path, so do not call `sales_playbook` again afterwards. Order
+matters: on an org with more than one playbook, the resolved call's sales/partnership
+tag is the strongest signal for which playbook applies, and it is only available
+after resolution. Skip this step entirely for questions that reference none of the
+user's data.
 
-Skip retrieval for questions that don't reference the user's data — "what's a good
-discovery question for a security buyer?" needs the playbook at most, not entity
-resolution.
+**2. Playbook — when nothing was named.** If step 1 did not run, call
+`sales_playbook` directly with the user's message verbatim as `latest_user_message`
+and the conversation so far as `conversation_history`. Do this for every such
+question: the native chat runs this retrieval on every turn, and the tool decides for
+itself when nothing applies (it returns `skipped`, which costs nothing). "What's our
+pricing?" and "give me 3 discovery questions for a CFO" are playbook questions even
+though they mention no one.
+
+Either way, exactly one `sales_playbook` call per question.
 
 For questions about the user themselves — their background, experience, or how to
 position who they are — call `whoami(detail="full")` rather than the default

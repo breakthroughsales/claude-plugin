@@ -6,6 +6,23 @@ All notable changes to this plugin are documented here. Format follows
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-09-08
+
+### Changed
+
+- `answer` now fires on any question about how this company sells — pricing,
+  discovery questions, positioning, objections, competitors — even when no person,
+  company, or call is named. Before, its description only claimed questions "about a
+  prospect, account, deal, or call", so "what's our pricing?" or "give me 3 discovery
+  questions for a CFO" fired no skill at all and were answered from general sales
+  knowledge instead of the org's playbook (measured: 5 of 27 turns on org 7, all of
+  this shape). The skill now resolves people/companies/calls first when the question
+  names one — so the resolved call's sales/partnership tag reaches `sales_playbook`,
+  which matters on orgs with two playbooks — and otherwise calls `sales_playbook`
+  directly on every question, the way the native chat does. Exactly one playbook
+  call per question either way.
+
+
 ## [1.2.0] - 2026-09-06
 
 ### Added
