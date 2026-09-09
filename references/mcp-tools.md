@@ -99,12 +99,14 @@ Semantic + keyword search across the org's call transcripts.
   | `participant_names` | string[] | any participant |
   | `business_names` | string[] | any business tied to the call |
   | `call_date` | int64 | unix seconds |
+  | `tags` | string[] | the call's tags: `Sales`, `Internal`, `Onboarding`, `Instructional`, … |
 
 - `sort_by` — sort grammar. Defaults depend on `query`: with an empty query it
   sorts `call_date:desc` (newest first); with a query it sorts by relevance.
 
-Only these four fields are filterable. Inventing a field name produces an error, not an
-ignored clause.
+Only these five fields are filterable. Inventing a field name produces an error, not an
+ignored clause. `tags:Sales` keeps to prospect calls; `tags:!=Internal` leaves out your own
+team's calls. Every transcript in a list or search result carries its `tags`.
 
 ### `call_transcript_conversation(transcript_id, include_structured=False, format="full", part=1)`
 

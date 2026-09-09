@@ -95,7 +95,7 @@ Do **not** use it when:
    `call_transcript_conversation` before you write. When the person has calls on record
    the map's **CALLS ON RECORD** recommendation names the step.
    Listing the call with `contact_transcripts_list` is not reading it, and
-   `<PastCallNotes>` on the contact are a digest, not the call: the native app hands the
+   The entity notes on the contact (the `<PastCallNotes>` block) are a digest, not the call: the native app hands the
    model the whole transcript here, and drafting from the notes instead is the gap. A
    long transcript arrives in parts; keep calling with `next_part` until it is null.
 

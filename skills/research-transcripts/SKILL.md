@@ -18,6 +18,55 @@ Wraps `search_transcripts`, `contact_transcripts_list`, and
 `call_transcript_conversation`. Full argument details in
 `${CLAUDE_PLUGIN_ROOT}/references/mcp-tools.md`.
 
+## Before searching: who is the request about?
+
+When the request names a person or a company ("what did Ben think of the demo",
+"pull up that call with Acme"), run `resolve_prompt_context(user_prompt=<verbatim>)`
+**first**, before `search_transcripts`. It says which contacts and businesses exist with
+that name, how many calls each has, and whether the name is ambiguous. A first name
+alone often matches several people, each with their own demo — searching transcripts
+for "Ben demo" and reading the top hit picks one of them silently, which is the worst
+outcome.
+
+- `clarification_needed: true` → reply with the clarifying question the
+  recommendations spell out (the candidates and their calls on record) and stop.
+- One matched contact → use its id with `contact_transcripts_list`, then open the
+  call you need. Do not fall back to a free-text `search_transcripts` for a person who
+  resolved.
+- A matched business but no contact ("that call with Acme") →
+  `search_transcripts(query=<topic or "">, filter_by="business_names:<name as returned>")`,
+  then open the call you need. `business_profile` returns the profile and notes, not
+  the call list.
+- No match → `search_transcripts` with the topic is the right next step.
+
+## A topic across a window ("product requests from the last week")
+
+The search index holds each call's name, imported summary, participants, businesses,
+date and tags — not what was said. A topic like "product requests" is rarely in a title,
+so do not search for it. Bound the set instead and read:
+
+1. `search_transcripts(query="", filter_by="call_date:>=<unix seconds> && tags:Sales",
+   sort_by="call_date:desc", limit=50)` — the prospect calls in the window, newest first.
+   The tool returns at most 50; if you get 50 back, the window holds more: query again
+   with `call_date:<=` the oldest date you received (`<=`, not `<`: several calls can share
+   a timestamp) and drop the ids you already have, until a page comes back short. Say how
+   many calls there were in total.
+2. Open **each** of them with `format="summary"` (the thematic summary) and read for the
+   topic. Do not stop at three because three felt like enough; stop when the list is done.
+3. Answer from what the summaries say, citing call and date; go back to `format="full"`
+   only for a call an exact quote must come from.
+
+If the window is empty, say so and offer the most recent calls instead of quietly
+substituting them.
+
+## After a clarifying question
+
+When you asked "which Ben?" and the user answered with a name, run
+`resolve_prompt_context` again on that name before anything else. The map for the
+clarified name carries the CALLS ON RECORD step; the first map did not, because the name
+was ambiguous. Then `contact_profile` — its `recent_calls` lists their calls, newest
+first, with tags — and read the calls the question is about.
+
 ## Choosing the entry point
 
 | The question | Tool |
@@ -35,9 +84,13 @@ transcript bodies.
 `search_transcripts(query, limit, filter_by, sort_by)`:
 
 - `query` — semantic + keyword. Empty browses without relevance ranking.
-- `filter_by` — filter grammar, applied **before** ranking. Only four fields exist:
-  `name`, `participant_names`, `business_names`, `call_date` (unix seconds). Inventing a
-  field name errors out rather than being ignored.
+- `filter_by` — filter grammar, applied **before** ranking. Only five fields exist:
+  `name`, `participant_names`, `business_names`, `call_date` (unix seconds), `tags`.
+  Inventing a field name errors out rather than being ignored.
+- `tags` is what kind of call it is: `Sales`, `Internal`, `Onboarding`,
+  `Instructional`, … A question about prospects or customers means `tags:Sales`; a
+  question about "my calls" in a window usually means `tags:!=Internal`. Every result
+  carries its `tags`, so say which calls you left out and why.
 - `sort_by` — sort grammar. Defaults to `call_date:desc` on an empty query,
   relevance otherwise.
 
