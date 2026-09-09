@@ -11,6 +11,46 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-09-09
+
+### Added
+
+- `contact_profile` and `business_profile` return `recent_calls`: that person's or
+  company's calls, newest first, with each call's `tags`. Resolving an entity now puts its
+  calls in front of the model the way the app shows the call list when an entity is pulled
+  in. The skills say when to read them (a question about past calls reads the thematic
+  summaries; up to 3 calls in full) and to re-run `resolve_prompt_context` on the name the
+  user gives after a clarifying question.
+- Call `tags` ("Sales", "Internal", "Onboarding", …) on every transcript in
+  `search_transcripts` and `contact_transcripts_list` results, and as a `filter_by` field
+  (`tags:Sales`, `tags:!=Internal`). Calls recorded before this release show their tags
+  once the search index has been refreshed. The research-transcripts skill
+  now handles "a topic across a window" by bounding the set (date + tags) and reading each
+  call's thematic summary, because the search index holds names and imported summaries,
+  not what was said.
+
+### Fixed
+
+- `resolve_prompt_context` probes a multi-word person's surname on its own as well as
+  the whole name, so a nickname or a misspelt first name ("Rob Jackson" for Robert
+  Jackson) still finds the person. A surname that came from a named person is not an
+  incidental word hit, and a named first name that starts the candidate's first name
+  ("Rob" for Robert) counts as evidence, so one Robert among eight Jacksons resolves
+  while two Mark Jacksons still get a question.
+- When a resolved contact has calls on record, the contact recommendation no longer
+  calls the entity notes "the primary source" — the notes are context; the call is the
+  source for what was said, and the **CALLS ON RECORD** step carries the open-the-call
+  instruction. In 3 of 82 harness runs the old wording stopped the model at the notes.
+- Recommendations and skills call the `<PastCallNotes>` block what it is: the entity notes
+  (what we extracted about a person or company from every past call), not a summary of any
+  call. The transcript ceiling is stated as a rule: full transcripts up to 3 calls, thematic
+  summaries above that. The app's ceiling is 5; the plugin's is lower because everything it
+  opens stays in Claude's context.
+- The research-transcripts skill resolves the request through `resolve_prompt_context`
+  before searching when a person or company is named, and asks when the name is
+  ambiguous. Searching transcripts for "Ben demo" and reading the top hit picked one of
+  two Bens with a demo on record silently.
+
 ## [0.10.2] - 2026-09-08
 
 ### Changed

@@ -43,12 +43,23 @@ app never has to guess here because the user attached the record; asking is how 
 surface gets the same certainty.
 
 **3. Detail.** For entities the map surfaced, call `contact_profile` and
-`business_profile`.
+`business_profile`. Each returns the entity notes and `recent_calls`: that person's or
+company's calls, newest first, with `tags`. When the request is about their past calls
+("from my calls with Ben, what does he care about"), the notes are the starting point,
+not the answer: read the calls — `format="summary"` for each (up to 3 in full).
+
+**After a clarifying question.** If you asked which person or company and the user
+answered with a name, run `resolve_prompt_context` on that name before continuing. The
+clarified map carries the CALLS ON RECORD step that the ambiguous one could not.
 
 **4. Evidence.** Pull transcripts with `search_transcripts`,
 `contact_transcripts_list`, or `call_transcript_conversation`. Use `format="summary"`
 when scanning several calls — pulling multiple transcripts at `format="full"` buries the
-question in raw text. Use `format="full"` for a single deep dive, and when the request
+question in raw text. The rule: up to 3 calls, open them in full; more than 3, open each as
+`format="summary"` (its thematic summary) and go back to `format="full"` only for the one
+call an exact quote or number must come from. The app carries full transcripts up to 5,
+but everything you open stays in your context for the whole conversation, so the
+plugin's ceiling is lower on purpose. Use `format="full"` for a single deep dive, and when the request
 turns on what was said on one call (a summary of it, notes from it, a follow-up to it,
 a thank-you for it), open that call — the native app hands the whole transcript to the
 model, and answering from the stored notes instead is the gap. A long transcript comes

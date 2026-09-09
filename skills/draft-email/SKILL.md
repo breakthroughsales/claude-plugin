@@ -27,7 +27,7 @@ the playbook.
 If the email is about a call ("thanks for your time on our call", a follow-up to the
 demo, "as we discussed"), open that transcript with `call_transcript_conversation`
 before drafting; the context map's **CALLS ON RECORD** recommendation names the step. Listing
-the call with `contact_transcripts_list` is not reading it, and `<PastCallNotes>` are a
+the call with `contact_transcripts_list` is not reading it, and the entity notes (`<PastCallNotes>`) are a
 digest, not the call. The native app hands the model the whole transcript here; an email
 written from the notes instead is the gap this rule closes.
 
