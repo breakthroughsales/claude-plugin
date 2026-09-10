@@ -11,6 +11,24 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-09-10
+
+### Fixed
+
+- `import_contact` given only a name that matches a company on record now returns that
+  company in `businesses` alongside `invalid_input`, so "add Glean as a company" is
+  answered from the record instead of asking for a domain.
+
+## [0.12.0] - 2026-09-10
+
+### Changed
+
+- `refresh_contact` takes `user_requested`. Claude states whether the user asked for the
+  refresh outright (or just confirmed one); the tool no longer reads that out of the
+  wording of `query`, which MCP clients never sent — every "refresh X" over the plugin
+  stalled on a confirmation question. The refresh-contact skill and the server
+  instructions say when to set it.
+
 ## [0.11.1] - 2026-09-09
 
 ### Fixed

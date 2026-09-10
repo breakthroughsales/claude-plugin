@@ -35,8 +35,17 @@ changing anything. All of these belong here:
 
 ## Calling
 
-`refresh_contact(linkedin_url=None, email=None, query=None)`. Pass the user's message as
-`query` when you have no identifier — resolution is the tool's job.
+`refresh_contact(linkedin_url=None, email=None, query=None, user_requested=False)`. Pass
+the user's message as `query` when you have no identifier — resolution is the tool's job.
+
+`user_requested` is your call, and the tool never infers it from the wording of `query`:
+
+- **true** — the user asked for the refresh outright ("refresh Jane", "re-pull his
+  details", "update her record from LinkedIn"), or has just confirmed a refresh you
+  offered. The tool starts the refresh.
+- **false** — you are acting on a hint: a change report, a complaint, a currency question
+  ("Sarah left Acme", "is Matt still at Quindar?"). The tool resolves the contact and
+  returns `needs_confirmation` so you can ask first.
 
 Annotated **destructive**; Claude Code prompts before it runs. Don't ask the user to
 pre-approve it.
@@ -49,7 +58,7 @@ that enqueued nothing.
 | Status | What happened | What you must do |
 | --- | --- | --- |
 | `started` | Refresh was **enqueued** | Report it's queued. Enrichment is *not* complete — don't present current field values as refreshed. |
-| `needs_confirmation` | One contact resolved, but from an **implicit** signal | **Stop and ask the user before refreshing.** Show which contact you matched. Do not call again until they confirm. |
+| `needs_confirmation` | One contact resolved, but from an **implicit** signal | **Stop and ask the user before refreshing.** Show which contact you matched. Once they confirm, call again with `user_requested=true`. |
 | `ambiguous` | Several candidates matched | Present the candidates and ask which. Do not pick one. |
 | `no_linkedin_url` | Contact found, but no stored URL to re-enrich from | Report it. Retrying will not help. |
 | `no_match` | Nothing resolved | Report it. Offer the import-contact skill if they have a URL or email. |
