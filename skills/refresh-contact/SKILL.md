@@ -10,8 +10,9 @@ when_to_use: >-
   company"); reports of a job or title change in ANY phrasing, including offhand and
   declarative ones ("Sarah left Acme", "he's at Globex now", "she's the CEO now", "FYI
   they moved on"); and currency questions ("is this current?", "do we have anything
-  newer on her?"). Prefer this over answer whenever a contact's employer or title is
-  reported changed, stale, or questioned — the tool confirms before changing anything,
+  newer on her?", "is Matt still at Quindar?", "where is Sarah now?", "did he leave?").
+  Prefer this over answer, and over a web search, whenever a contact's employer or
+  title is reported changed, stale, or questioned — the tool confirms before changing anything,
   so routing here is safe. Do NOT use for someone not yet in the system; that is
   import-contact.
 ---
