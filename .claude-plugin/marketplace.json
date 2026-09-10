@@ -9,7 +9,7 @@
       "name": "breakthrough",
       "source": "./",
       "description": "Connects Claude to a living playbook distilled from your sales calls, so it always has the right context and knows what works best across your organization, without you having to manage any of it yourself.",
-      "version": "0.11.0"
+      "version": "0.11.1"
     }
   ]
 }

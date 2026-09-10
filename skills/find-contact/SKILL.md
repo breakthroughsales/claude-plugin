@@ -7,8 +7,10 @@ description: >-
 when_to_use: >-
   Use when the user says "who is this", "do we have Jane", "look up jane@acme.com",
   "what's her title", "is he in the system", "which Jane do we know", "pull up her
-  record". Do NOT use to add someone new; that is import-contact. Do NOT use to update
-  a record that has gone stale; that is refresh-contact. Do NOT use for what was said
+  record", "where does Matt work". Also use before any web search about a named person:
+  Breakthrough's record comes first, the web at most in addition. Do NOT use to add
+  someone new; that is import-contact. Do NOT use to update a record that has gone
+  stale; that is refresh-contact. Do NOT use for what was said
   on calls with them; that is research-transcripts. Do NOT use for questions needing
   judgment about the person rather than their record; that is answer.
 ---

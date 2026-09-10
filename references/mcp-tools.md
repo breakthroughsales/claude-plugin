@@ -186,6 +186,15 @@ instruct the user to pre-approve these.
 
 Imports a contact from a LinkedIn profile URL or an email address.
 
+Given only a name (`query="Ben Beal"`), it first checks the org's existing contacts:
+`already_on_record` (with `contact_id`) means the person is already in Breakthrough and
+nothing was imported; use `contact_profile` or `refresh_contact` instead. `ambiguous_name`
+lists `candidates`; ask which one. `invalid_input` means no URL or email was found and
+nobody on record matches: ask the user for one, never guess a profile.
+
+An email-only import is held to the name the address carries: a vendor answer whose
+name contradicts `john.smith@…` is rejected rather than imported.
+
 Side effects: queues background enrichment against external data sources and polls for
 the new contact for up to ~90s. A slow return is normal.
 

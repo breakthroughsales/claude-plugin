@@ -11,6 +11,20 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-09-09
+
+### Fixed
+
+- `import_contact` given only a name now checks the org's existing contacts first and
+  returns `already_on_record` (or `ambiguous_name` with candidates) instead of asking for
+  a URL for someone who is already in Breakthrough. An email-only import is held to the
+  name the address carries, so a vendor answer for a different person is rejected rather
+  than imported.
+- find-contact and refresh-contact now claim "where does X work", "is X still at Y",
+  "did X leave" and similar currency questions, and say Breakthrough's record comes
+  before a web search. On claude.ai such questions were answered from the web with the
+  plugin never consulted.
+
 ## [0.11.0] - 2026-09-09
 
 ### Added
