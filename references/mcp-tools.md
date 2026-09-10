@@ -190,7 +190,10 @@ Given only a name (`query="Ben Beal"`), it first checks the org's existing conta
 `already_on_record` (with `contact_id`) means the person is already in Breakthrough and
 nothing was imported; use `contact_profile` or `refresh_contact` instead. `ambiguous_name`
 lists `candidates`; ask which one. `invalid_input` means no URL or email was found and
-nobody on record matches: ask the user for one, never guess a profile.
+nobody on record matches: ask the user for one, never guess a profile. When the query
+names a company that is on record, `invalid_input` also carries `businesses` (id, name,
+domain): if the user meant the company, it is already in Breakthrough (use
+`business_profile`); if they meant a person at it, ask for that person's URL or email.
 
 An email-only import is held to the name the address carries: a vendor answer whose
 name contradicts `john.smith@…` is rejected rather than imported.
@@ -198,8 +201,13 @@ name contradicts `john.smith@…` is rejected rather than imported.
 Side effects: queues background enrichment against external data sources and polls for
 the new contact for up to ~90s. A slow return is normal.
 
-### `refresh_contact(linkedin_url=None, email=None, query=None)`
+### `refresh_contact(linkedin_url=None, email=None, query=None, user_requested=False)`
 
 Re-enriches an existing contact from its stored LinkedIn URL. See
 `skills/refresh-contact/SKILL.md` — the five return statuses mean materially different
 things, and only one of them changed any state.
+
+`user_requested=true` means the user asked for the refresh outright or has just confirmed
+one; the tool starts it. `false` (the default) means you are acting on a hint; the tool
+resolves the contact and returns `needs_confirmation` so you can ask. The tool does not
+read intent out of `query`.
