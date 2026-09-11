@@ -11,6 +11,16 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-09-11
+
+### Changed
+
+- `refresh-contact` and `find-contact` skill descriptions now say that a contact's own
+  Breakthrough record is available for "is X still at Y" and other named-person
+  questions. claude.ai shows the model only the `description` field (not
+  `when_to_use`) and never the MCP server instructions, so the routing wording has to
+  live there.
+
 ## [0.12.1] - 2026-09-10
 
 ### Fixed

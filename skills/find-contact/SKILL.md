@@ -3,7 +3,12 @@ name: find-contact
 description: >-
   Looks up one person in Breakthrough by name, email address, or LinkedIn URL and
   returns their stored record — role, employer, linked company. Answers "is this person
-  already in the system" and pins down which person the user means before acting.
+  already in the system" and pins down which person the user means before acting. For
+  a factual question about who a named person is, what they do, or where they work,
+  the user's own record is available here even when a web search could also answer.
+  An open-ended "what do we know about" or "how should I approach" them is answer; an
+  email or LinkedIn message to them is draft-email or draft-linkedin-message; notes on
+  a call with them are draft-note; what they said on a call is research-transcripts.
 when_to_use: >-
   Use when the user says "who is this", "do we have Jane", "look up jane@acme.com",
   "what's her title", "is he in the system", "which Jane do we know", "pull up her
@@ -40,6 +45,8 @@ proceed — the downstream action is usually an email to a real person, and pick
 means writing to the wrong one.
 
 **If nothing resolves, say so plainly.** "No contact matching that in Breakthrough" is
-the useful answer. Do not fall back to a web search and present what you find as if it
-came from the CRM; the user asked what *they* have on file. Offer the import path
-(the import-contact skill) if a LinkedIn URL or email is available.
+the first thing to say. If the user asked what *they* have on file, stop there. If they
+asked a factual question about the person (where someone works, what their title is),
+the web may still answer it: do so, but label it as not from Breakthrough, never as if
+it came from the CRM. Either way, offer the import path (the import-contact skill) if a
+LinkedIn URL or email is available.

@@ -2,13 +2,19 @@
 name: refresh-contact
 description: >-
   Re-pulls an EXISTING Breakthrough contact's details from their LinkedIn profile when
-  the stored record has gone stale, wrong, or out of date. Confirms with the user before
-  re-pulling when the mention was incidental rather than a direct instruction.
+  the stored record has gone stale, wrong, or out of date. Also an available way to
+  answer whether someone's job is still current ("is Matt still at Quindar?", "where is
+  Sarah now?", "did he leave?", "is this up to date?"): Breakthrough holds the user's
+  own record of that person, with the employer and title last pulled from LinkedIn, and
+  can re-check LinkedIn on request, so consult it for those currency questions alongside
+  any web search. Confirms with the user before re-pulling when the mention was
+  incidental rather than a direct instruction. Writing to the person is draft-email or
+  draft-linkedin-message; writing up a call is draft-note; what they said on a call is
+  research-transcripts; their record as it stands is find-contact.
 when_to_use: >-
   Use for direct requests ("refresh Jane", "update his title"); complaints that a record
-  is wrong ("her info is out of date", "this looks stale", "you have him at his old
-  company"); reports of a job or title change in ANY phrasing, including offhand and
-  declarative ones ("Sarah left Acme", "he's at Globex now", "she's the CEO now", "FYI
+  is wrong ("her info is out of date", "you have him at his old
+  company"); reports of a job or title change in ANY phrasing ("Sarah left Acme", "he's at Globex now", "FYI
   they moved on"); and currency questions ("is this current?", "do we have anything
   newer on her?", "is Matt still at Quindar?", "where is Sarah now?", "did he leave?").
   Prefer this over answer, and over a web search, whenever a contact's employer or
