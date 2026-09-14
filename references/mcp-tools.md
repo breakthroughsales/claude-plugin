@@ -98,11 +98,15 @@ Semantic + keyword search across the org's call transcripts.
   | `name` | string | the call name |
   | `participant_names` | string[] | any participant |
   | `business_names` | string[] | any business tied to the call |
-  | `call_date` | int64 | unix seconds |
+  | `call_date` | int64 | a date as `YYYY-MM-DD` (a bare date covers the whole day, UTC) or unix seconds |
   | `tags` | string[] | the call's tags: `Sales`, `Internal`, `Onboarding`, `Instructional`, … |
 
 - `sort_by` — sort grammar. Defaults depend on `query`: with an empty query it
   sorts `call_date:desc` (newest first); with a query it sorts by relevance.
+
+Every response carries `today` (UTC date) and, when the filter included `call_date`,
+`call_date_window` — the dates actually searched. If the window is not the period the
+user asked about, search again with the right dates before reporting no calls.
 
 Only these five fields are filterable. Inventing a field name produces an error, not an
 ignored clause. `tags:Sales` keeps to prospect calls; `tags:!=Internal` leaves out your own

@@ -11,6 +11,15 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-09-14
+
+### Changed
+
+- `research-transcripts` and the tool reference: `search_transcripts` now takes
+  `call_date` filters as `YYYY-MM-DD` dates and every response reports `today` plus the
+  `call_date_window` actually searched. In Measured's prod logs 5 of 16 date windows
+  had been computed a year early and reported as "no calls that week".
+
 ## [0.13.0] - 2026-09-11
 
 ### Changed

@@ -45,7 +45,7 @@ The search index holds each call's name, imported summary, participants, busines
 date and tags — not what was said. A topic like "product requests" is rarely in a title,
 so do not search for it. Bound the set instead and read:
 
-1. `search_transcripts(query="", filter_by="call_date:>=<unix seconds> && tags:Sales",
+1. `search_transcripts(query="", filter_by="call_date:>=<YYYY-MM-DD> && tags:Sales",
    sort_by="call_date:desc", limit=50)` — the prospect calls in the window, newest first.
    The tool returns at most 50; if you get 50 back, the window holds more: query again
    with `call_date:<=` the oldest date you received (`<=`, not `<`: several calls can share
@@ -85,7 +85,10 @@ transcript bodies.
 
 - `query` — semantic + keyword. Empty browses without relevance ranking.
 - `filter_by` — filter grammar, applied **before** ranking. Only five fields exist:
-  `name`, `participant_names`, `business_names`, `call_date` (unix seconds), `tags`.
+  `name`, `participant_names`, `business_names`, `call_date` (a date as `YYYY-MM-DD`,
+  or unix seconds), `tags`. Every response carries `today` and, when you filtered by
+  `call_date`, `call_date_window` with the dates actually searched; check it against
+  the period the user asked about before reporting that there were no calls.
   Inventing a field name errors out rather than being ignored.
 - `tags` is what kind of call it is: `Sales`, `Internal`, `Onboarding`,
   `Instructional`, … A question about prospects or customers means `tags:Sales`; a
