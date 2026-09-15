@@ -60,8 +60,11 @@ Returns a context map:
   title matches that mention (id, name, date, participants), with the query shown so a
   generic mention ("our call") can be judged.
 - `clarification_needed` / `ambiguous_names` — set when a name token matches more than
-  one person; each candidate carries `transcript_count`. Ask the user which one; do not
-  pick, even if only one has calls on record.
+  one person AND the evidence does not separate them. Each candidate carries
+  `transcript_count`. Candidates the request rules out are already eliminated before
+  the flag is set — another word in the request, a first-name prefix, or shared call
+  history when exactly one of them has any. So when the flag is set, ask: nothing
+  available distinguishes them.
 
 **Follow `recommendations` unless you have a specific reason not to.** They are generated
 from real counts against this org's data, so they encode what actually exists
@@ -98,11 +101,15 @@ Semantic + keyword search across the org's call transcripts.
   | `name` | string | the call name |
   | `participant_names` | string[] | any participant |
   | `business_names` | string[] | any business tied to the call |
-  | `call_date` | int64 | unix seconds |
+  | `call_date` | int64 | a date as `YYYY-MM-DD` (a bare date covers the whole day, UTC) or unix seconds |
   | `tags` | string[] | the call's tags: `Sales`, `Internal`, `Onboarding`, `Instructional`, … |
 
 - `sort_by` — sort grammar. Defaults depend on `query`: with an empty query it
   sorts `call_date:desc` (newest first); with a query it sorts by relevance.
+
+Every response carries `today` (UTC date) and, when the filter included `call_date`,
+`call_date_window` — the dates actually searched. If the window is not the period the
+user asked about, search again with the right dates before reporting no calls.
 
 Only these five fields are filterable. Inventing a field name produces an error, not an
 ignored clause. `tags:Sales` keeps to prospect calls; `tags:!=Internal` leaves out your own
