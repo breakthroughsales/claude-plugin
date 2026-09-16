@@ -11,6 +11,35 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-09-15
+
+### Changed
+
+- `gather-context` and the tool reference: an ambiguous name is no longer an automatic
+  question. The resolver already eliminates candidates the request's other words rule
+  out; shared call history is now the last rung of that same narrowing, so a name where
+  only one candidate has ever been on a call resolves and the reply states the
+  assumption, naming the alternatives and how old that history is. "my call with
+  Venkat" matched two people, one never spoken to, and asked anyway. Names where
+  several candidates have calls still ask — four of twenty-seven Bens, two of eleven
+  Marcos — which is the case the guard was added for.
+- `call_transcript_conversation` no longer returns the attendees' business and contact
+  descriptions on either format, matching what chat has always done, and `summary` no
+  longer returns the thematic summary twice. Measured across nine calls: summary reads
+  69% smaller, full reads 39% smaller. Read those descriptions from `business_profile`
+  / `contact_profile` when you need them.
+- `contact_profile` clarification candidates now carry `transcript_count`, which
+  `resolve_prompt_context` has always reported and this tool did not.
+
+## [0.14.0] - 2026-09-14
+
+### Changed
+
+- `research-transcripts` and the tool reference: `search_transcripts` now takes
+  `call_date` filters as `YYYY-MM-DD` dates and every response reports `today` plus the
+  `call_date_window` actually searched. In Measured's prod logs 5 of 16 date windows
+  had been computed a year early and reported as "no calls that week".
+
 ## [0.13.0] - 2026-09-11
 
 ### Changed
