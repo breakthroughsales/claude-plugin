@@ -13,11 +13,6 @@ user as "no data found."
 
 ## Read-only tools
 
-### `health()`
-
-Liveness only. Returns `status`, `service`, `environment`. Takes no arguments and
-touches no org data. Use it to distinguish "the server is down" from "my auth is wrong."
-
 ### `whoami(detail="basic" | "full")`
 
 **`detail="basic"`** (default) — `email`, `license_id`, `organization_id`. Reads the
