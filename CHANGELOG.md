@@ -11,6 +11,15 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-09-17
+
+### Changed
+
+- Tool reference: dropped `health()`. The MCP server no longer registers it — it had
+  zero calls in 30 days of production and the server already answers `GET /health` for
+  liveness, so the tool only cost a slot in every client's tool list. Nothing called it;
+  use `whoami()` to check that auth and license context are working.
+
 ## [0.15.0] - 2026-09-15
 
 ### Changed
