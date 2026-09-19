@@ -11,6 +11,19 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-09-18
+
+### Added
+
+- `sales_methodology`: one company's sales-methodology scorecard (MEDDPICC, or the org's
+  own methodology) — how the deal is being run against the team's process. Each category
+  shows its coverage, what is not yet covered, and the lead of its evidence (who, what was
+  said, the risk); `categories` expands the full evidence for the parts of the deal a
+  question is about. `business_profile` flags a company that has one (`sales_methodology`).
+  `gather-context` reads it when the request is about the deal, and a new coaching
+  reference says how to use it: gaps first with their evidence, the as-of date, the stage
+  inferred from the assessment. Drafting and call notes do not use it unless asked.
+
 ## [0.16.0] - 2026-09-17
 
 ### Changed

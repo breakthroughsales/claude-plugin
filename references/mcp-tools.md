@@ -74,6 +74,35 @@ embedded in the query, so passing the user's phrasing directly usually works.
 
 Same, for businesses. Understands domains and LinkedIn company URLs.
 
+When the company has a sales-methodology scorecard, the response carries a
+`sales_methodology` field: methodology, `as_of`, `met` / `partial` / `total`, and a hint.
+It is a pointer: the scorecard belongs to the company. `contact_profile` returns the
+person's `company` (`id`, `name`) with a yes/no `sales_methodology`; for a person's deal,
+pass `company.id` to `sales_methodology`.
+
+### `sales_methodology(business_id=None, query=None, categories=None, detail="summary")`
+
+One company's sales-methodology scorecard (MEDDPICC or the org's own methodology): how the
+rep is running the deal against the team's process, built from every recorded sales call.
+Each category shows its coverage, what is not yet covered, and the lead of its evidence
+(who, what was said, the risk), followed by the overall assessment. Internal and
+read-only; not the notes of any one call. How to coach from it:
+`${CLAUDE_PLUGIN_ROOT}/references/sales-coaching.md`.
+
+- `business_id` — preferred, from `business_profile`. `query` (name, domain, LinkedIn
+  company URL) when the id is unknown.
+- `categories` — category names as the scorecard shows them (or ids) to expand in full,
+  for a question about one part of the deal ("who is the economic buyer?").
+- `detail="full"` — every category in full. Several thousand tokens; prefer `categories`.
+
+| Status | Meaning |
+|---|---|
+| `ok` | `scorecard` text, plus `methodology`, `as_of`, `categories` (the names to expand by); `unknown_categories` if some requested categories did not match |
+| `no_scorecard` | None for this company. Do not estimate one |
+| `needs_clarification` | `query` matched several companies; ask which, or pass `business_id` |
+| `skipped` | `no_match`: no company in this org matches |
+| `invalid_input` | No company given, or `detail` was not `summary` or `full`. It reads one company at a time and cannot list scorecards across deals |
+
 ### `contact_transcripts_list(contact_ids, limit=50)`
 
 Transcript **metadata** for a set of contact IDs. Takes integer IDs, not names — resolve

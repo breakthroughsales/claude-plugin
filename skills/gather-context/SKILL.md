@@ -50,6 +50,14 @@ company's calls, newest first, with `tags`. When the request is about their past
 ("from my calls with Ben, what does he care about"), the notes are the starting point,
 not the answer: read the calls — `format="summary"` for each (up to 3 in full).
 
+**Sales methodology.** The scorecard belongs to the company. `business_profile` shows it
+as a `sales_methodology` field. When the request is about a deal (what
+to do next, gaps, call prep, strategy, where it stands) and it is present, call
+`sales_methodology` with the `business_id`, then read
+`${CLAUDE_PLUGIN_ROOT}/references/sales-coaching.md` before answering. For a deal with a
+person, `contact_profile` shows `company.sales_methodology`; pass `company.id`. Skip it for
+drafting and for notes from a call unless the user asks.
+
 **After a clarifying question.** If you asked which person or company and the user
 answered with a name, run `resolve_prompt_context` on that name before continuing. The
 clarified map carries the CALLS ON RECORD step that the ambiguous one could not.
