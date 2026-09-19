@@ -53,6 +53,11 @@ Where the call left a framework slot empty, say it's unestablished. A MEDDPICC w
 invented Champion is worse than one with a blank Champion, because the blank prompts the
 question and the invention forecloses it.
 
+MEDDPICC or BANT notes are about the call they are written from: take them from that
+call. They are not the company's sales-methodology scorecard, which is the cumulative
+record across every call (the calls feed it). Do not pull the scorecard into a call
+write-up unless the user asks for it.
+
 ## Delivering
 
 Output the note. If they want it saved, write it to a local file — the plugin cannot
