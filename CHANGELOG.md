@@ -11,6 +11,30 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-09-23
+
+### Added
+
+- `refresh_contact` records where the user SAYS someone works, under confirmation. Pass
+  the company as `employer` ("Mauricio works at Autopistas del Café", "he's advising
+  RudderStack") instead of re-pulling LinkedIn, which is the source that was wrong. The
+  tool asks one question at a time — which company, whether our record was wrong or they
+  moved, from when — shows exactly what will change, and writes only after the user agrees
+  and the `apply_token` it issued comes back. A company the person LEFT, or one named in a
+  question, is never an employer. A company not on file is looked up by name, so the user
+  only confirms what was found (or gives the website when nothing was); `employer_website`
+  carries that web address so `employer` stays the company's name, and `contact_id` picks
+  between people who share a name. A company added this way is enriched like one added in
+  the app.
+
+### Changed
+
+- `refresh-contact` skill: its description now leads with recording an employer the user
+  states, not only re-pulling LinkedIn — claude.ai shows the model a skill's description
+  and nothing else, so a statement like "Marco works at Kleecks, I just met him" was going
+  to `find-contact` and never reaching the tool. The body no longer says a stated employer
+  "returns needs_confirmation"; it walks the confirmation steps instead.
+
 ## [0.17.0] - 2026-09-18
 
 ### Added
