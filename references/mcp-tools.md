@@ -232,7 +232,7 @@ name contradicts `john.smith@…` is rejected rather than imported.
 Side effects: queues background enrichment against external data sources and polls for
 the new contact for up to ~90s. A slow return is normal.
 
-### `refresh_contact(linkedin_url=None, email=None, query=None, user_requested=False)`
+### `refresh_contact(linkedin_url=None, email=None, query=None, user_requested=False, employer=None, employer_business_id=None, employer_change_kind=None, employer_since=None, apply_token=None, employer_website=None, contact_id=None)`
 
 Re-enriches an existing contact from its stored LinkedIn URL. See
 `skills/refresh-contact/SKILL.md` — the five return statuses mean materially different
@@ -242,3 +242,24 @@ things, and only one of them changed any state.
 one; the tool starts it. `false` (the default) means you are acting on a hint; the tool
 resolves the contact and returns `needs_confirmation` so you can ask. The tool does not
 read intent out of `query`.
+
+**When the user TELLS you where someone works** — "Mauricio works at Autopistas del
+Café", "she's at Odinsa now", "he's advising RudderStack" — pass that company as
+`employer`. A LinkedIn re-pull cannot help: the provider is what was wrong. `employer`
+is where the person IS. "Venkat left Splashtop" names where he is NOT and carries no
+employer at all (if they also say where he went, that destination is the `employer`); a
+company inside a question — "is Matt still at Quindar?" — is something to check, never an
+employer.
+
+Nothing is written until the user confirms. Each status names the one thing still
+missing; ask the user and call again with the answer, never filling it in yourself:
+`needs_contact_choice` → pass the chosen candidate's `id` as `contact_id`;
+`needs_business_choice` → pass the chosen `employer_business_id`, or the website as
+`employer_website` if none is right; `needs_new_company_confirmed` → ask whether the
+company the tool found is right (or, if it found none, for the website), then pass the
+confirmed website as `employer_website`, keeping `employer` as the company's name; `needs_change_kind` → pass `employer_change_kind` as
+`correction` (our record was wrong) or `job_change` (they moved), which decides whether
+past calls move; `needs_since` → pass `employer_since` as YYYY-MM-DD; `proposal` → show the
+`message` and, only after the user agrees, call with the `apply_token` it returned (single
+use, short-lived — never store or invent one); `no_change_needed` → the record is already
+right, say so.

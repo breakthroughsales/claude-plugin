@@ -1,37 +1,43 @@
 ---
 name: refresh-contact
 description: >-
-  Re-pulls an EXISTING Breakthrough contact's details from their LinkedIn profile when
-  the stored record has gone stale, wrong, or out of date. Also an available way to
-  answer whether someone's job is still current ("is Matt still at Quindar?", "where is
-  Sarah now?", "did he leave?", "is this up to date?"): Breakthrough holds the user's
-  own record of that person, with the employer and title last pulled from LinkedIn, and
-  can re-check LinkedIn on request, so consult it for those currency questions alongside
-  any web search. Confirms with the user before re-pulling when the mention was
-  incidental rather than a direct instruction. Writing to the person is draft-email or
-  draft-linkedin-message; writing up a call is draft-note; what they said on a call is
-  research-transcripts; their record as it stands is find-contact.
+  Keeps an EXISTING Breakthrough contact's employer and title right. When the user
+  states where someone works now ("Marco works at Kleecks, I just met him", "she's
+  advising RudderStack"), records that employer once the user confirms — the fix for
+  people LinkedIn has wrong. Otherwise re-pulls their details from LinkedIn when the
+  record is stale, and answers whether someone's job is still current ("is Matt still
+  at Quindar?", "did he leave?"): Breakthrough holds the user's own record of that
+  person, so consult it alongside any web search. Confirms before changing anything.
+  Writing to them is draft-email or draft-linkedin-message; a call write-up is
+  draft-note; what they said on a call is research-transcripts; their record as it
+  stands is find-contact.
 when_to_use: >-
-  Use for direct requests ("refresh Jane", "update his title"); complaints that a record
-  is wrong ("her info is out of date", "you have him at his old
-  company"); reports of a job or title change in ANY phrasing ("Sarah left Acme", "he's at Globex now", "FYI
-  they moved on"); and currency questions ("is this current?", "do we have anything
-  newer on her?", "is Matt still at Quindar?", "where is Sarah now?", "did he leave?").
-  Prefer this over answer, and over a web search, whenever a contact's employer or
-  title is reported changed, stale, or questioned — the tool confirms before changing anything,
-  so routing here is safe. Do NOT use for someone not yet in the system; that is
-  import-contact.
+  Use for statements of where someone works now ("Mauricio works at Autopistas del
+  Café", "he's at Globex now", "he joined Kleecks"); refresh requests ("refresh Jane",
+  "update his title"); complaints that a record is wrong ("you have him at his old
+  company"); departures ("Sarah left Acme", "FYI they moved on"); and currency
+  questions ("is this current?", "where is Sarah now?"). Prefer this over find-contact,
+  answer, and a web search whenever a contact's employer or title is stated, reported
+  changed, or questioned — nothing changes without the user's say-so. Do NOT use for
+  someone not yet in the system; that is import-contact.
 ---
 
 # Refresh a contact
 
-Wraps the `refresh_contact` MCP tool.
+Wraps the `refresh_contact` MCP tool, which does two different things:
+
+- **Records an employer the user states.** The user is the source of truth; nothing is
+  re-read from LinkedIn, because LinkedIn is usually what was wrong.
+- **Re-pulls the record from LinkedIn** when it has gone stale.
 
 ## When this applies
 
-The backend routes broadly to refresh on purpose, because the tool confirms before
-changing anything. All of these belong here:
+The backend routes broadly on purpose, because the tool confirms before changing
+anything. All of these belong here:
 
+- **Statements of where someone works now** — "Mauricio works at Autopistas del Café",
+  "he joined Kleecks", "she's advising RudderStack". Advisory, fractional and board roles
+  count. These go to the correction path below, not a refresh.
 - **Explicit commands** — "refresh Jane's contact info", "update this contact's title"
 - **Stale-data complaints** — "John's data is wrong", "you have her at her old employer"
 - **Employer or title changes, however phrased** — including passive and note-style
@@ -39,7 +45,37 @@ changing anything. All of these belong here:
   now", "FYI Sarah left Acme"
 - **Currency questions** — "is his info up to date?", "do you have more current data?"
 
-## Calling
+## Recording an employer the user states
+
+Call `refresh_contact(query=..., employer="<company>")` — the company as the user said
+it, or its website. `employer` is where the person IS:
+
+- "Venkat **left** Splashtop" names where he is NOT — there is no employer; this is a
+  plain refresh. If they also say where he went ("left Splashtop for RudderStack"), the
+  destination is the `employer`, never the origin.
+- A company inside a **question** — "is Matt still at Quindar?" — is something to check,
+  never an employer.
+
+Nothing is written until the user confirms. Each status names the one thing still
+missing — **ask the user, then call again with their answer. Never fill these in
+yourself.**
+
+| Status | Ask the user | Then call again with |
+| --- | --- | --- |
+| `needs_contact_choice` | which of the listed people they mean | `contact_id` of that candidate |
+| `needs_business_choice` | which of the listed companies they mean | `employer_business_id`, or `employer_website` if none is right |
+| `needs_new_company_confirmed` | whether the company the tool found is right — or its website, if it found none | `employer_website=<website>` — `employer` stays the company's name |
+| `needs_change_kind` | was our record simply wrong, or did they change jobs? (decides whether past calls move) | `employer_change_kind="correction"` or `"job_change"` |
+| `needs_since` | when they started | `employer_since="YYYY-MM-DD"` |
+| `proposal` | show `message` — it says exactly what will change — and ask whether to apply | `apply_token` from this result, **only after they agree** |
+| `no_change_needed` | nothing — the record is already right; say so | — |
+| `applied` | nothing — report what changed | — |
+| `expired` | the confirmation lapsed; start over | — |
+
+Keep the same `employer` and answers on every follow-up call. `apply_token` is single
+use and short lived: never store, reuse, or invent one.
+
+## Re-pulling from LinkedIn
 
 `refresh_contact(linkedin_url=None, email=None, query=None, user_requested=False)`. Pass
 the user's message as `query` when you have no identifier — resolution is the tool's job.
@@ -58,8 +94,8 @@ pre-approve it.
 
 ## Handling the result — read this before reporting anything
 
-Five statuses. **Only `started` changed any state.** Every other status is a safe no-op
-that enqueued nothing.
+For a re-pull (no `employer`), five statuses. **Only `started` changed any state.** Every
+other status is a safe no-op that enqueued nothing.
 
 | Status | What happened | What you must do |
 | --- | --- | --- |
@@ -76,11 +112,9 @@ Breakthrough deliberately separates an explicit refresh *command* from an implic
 the contact but stops short of refreshing, so a stray mention never silently triggers
 a re-pull.
 
-There is a second deliberate case. Phrasing that asserts a **new value** — "update
-Marco's employer, he's now at Kleecks" — returns `needs_confirmation` rather than
-queueing. Refresh only re-reads LinkedIn; it does not write the value the user just
-stated, and LinkedIn may not reflect it yet. So confirm rather than implying the change
-was applied.
+A statement of a **new employer** — "update Marco's employer, he's now at Kleecks" — is
+not a re-pull at all: pass it as `employer` (above). A re-pull only re-reads LinkedIn and
+cannot record what the user just told you.
 
 Collapsing these statuses into "done" defeats the guardrail. Report the one you got.
 
@@ -90,3 +124,6 @@ Name the contact you matched — full name, ID, current role and employer — so
 catch a wrong match before anything is re-enriched.
 
 For `started`, say the refresh is queued and data will update, not that it is updated.
+
+For a stated employer, report only what the tool says happened: a `proposal` is not a
+change until the user agrees and `applied` comes back.
