@@ -11,6 +11,54 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-09-25
+
+### Added
+
+- The plugin now carries the Breakthrough mark. `assets/icon.png` is the orange watercolour
+  triangle the app uses in its own navigation, squared and centred at 512x512, wired up
+  through an `interface` block that Codex and the ChatGPT catalogue read. That block carries
+  every field Codex's plugin validator requires once an `interface` is present — display and
+  developer names, short and long descriptions, category, capabilities and starter prompts —
+  so a partial block cannot be rejected where no block at all would have passed. Claude has no icon field at all — its manifest schema
+  has none and no official marketplace entry carries one — so on Claude the tile stays blank
+  until the plugin is submitted to the Claude directory, which is where those icons come from.
+
+### Fixed
+
+- The install section no longer claims there is "no shared or organization-wide install".
+  A ChatGPT workspace admin can import the marketplace once for the whole team, which is now
+  documented as the team route, and the per-account statements are scoped rather than
+  absolute — a workspace member should ask their admin rather than adding a second copy,
+  since two sources registering a plugin of the same name collide.
+
+- The plugin shows as "Breakthrough" rather than "breakthrough" in catalogs. `displayName`
+  was set in `plugin.json` but not in the `marketplace.json` entry, and a catalog reads the
+  marketplace entry — so claude.ai (which reads the installed plugin's own manifest) got it
+  right while ChatGPT fell back to the bare `name`.
+
+- Claude install steps corrected against the live UI after reinstalling from the renamed
+  repository. The plugin installs from the marketplace on its own with a short lag, so the
+  Discover → Add step is now the fallback for when it does not, not a required step. Removed
+  the instruction to leave "Sync automatically" on — no such control exists in claude.ai;
+  **Add → Manage marketplaces** shows the synced commit instead, which is what actually
+  tells you whether you are on the latest release.
+- Troubleshooting covers "Failed to add marketplace" in Claude Desktop: it caches the
+  marketplace list and does not see changes made on claude.ai until restarted, so it can
+  refuse an add that collides with a registration the server no longer has. Restart first,
+  and look before adding — marketplaces are per account, not per device.
+- Troubleshooting covers ChatGPT/Codex showing an older version than the repository: a
+  ChatGPT workspace marketplace import syncs once daily, so the workspace trails a release
+  by up to 24 hours until an admin uses Sync now. Also says how to tell a workspace-imported
+  copy from a directly installed one, since both can be present under the same plugin name
+  and neither updates the other.
+- Troubleshooting covers two failures found while re-pointing our own ChatGPT workspace at
+  the renamed repository: an import breaks permanently when the source repo is renamed
+  (`GITHUB_FETCH_FAILED` — the REST API answers 301 and the importer does not follow it,
+  unlike git and raw.githubusercontent.com), and it must be deleted and re-added rather than
+  edited; and leaving Path and Branch empty on import, since "Repository root" is a display
+  label rather than a value to type.
+
 ## [0.19.0] - 2026-09-25
 
 ### Changed

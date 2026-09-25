@@ -10,9 +10,12 @@ it never posts, sends, or publishes anything on your behalf.
 ## Install
 
 The plugin is distributed through the public marketplace repository
-[`breakthroughsales/plugin`](https://github.com/breakthroughsales/plugin). You add that
-marketplace to **your own account** — there is no shared or organization-wide install, so
-everyone who wants the plugin does this once.
+[`breakthroughsales/plugin`](https://github.com/breakthroughsales/plugin). Adding that
+marketplace is normally a per-account step, so each person does it once — a teammate having
+it does not put it on your account.
+
+The exception is a **ChatGPT workspace**, where an admin can import the marketplace once for
+everyone (see below). That import is the only route here that covers a whole team.
 
 Skills and tools install together wherever the host supports plugins — Claude, ChatGPT/Codex
 and Cursor. Claude works either way, desktop or web. ChatGPT has one catch: **chatgpt.com in
@@ -25,9 +28,13 @@ install is local to that machine and does not reach your account or the browser.
 1. **Customize** in the left nav, then the **Plugins** tab.
 2. **Add** (top right) → **Add marketplace** → **Add from a repository**.
 3. In **URL**, enter `breakthroughsales/plugin`, then **Sync**.
-4. Breakthrough appears under **Discover**; click **Add**.
+4. Breakthrough installs from the marketplace on its own, which takes a few seconds. If it
+   has not appeared under **Yours** after a minute, open **Discover** and click **Add** on
+   the Breakthrough card.
 
-Leave **Sync automatically** on to receive updates as they are published.
+To check which release you are on, **Add** → **Manage marketplaces** shows the exact commit
+it last synced. Compare it against the newest commit on
+[`breakthroughsales/plugin`](https://github.com/breakthroughsales/plugin/commits/main).
 
 ### Claude Code
 
@@ -40,9 +47,16 @@ Or interactively: `/plugin marketplace add breakthroughsales/plugin`, then `/plu
 
 ### ChatGPT and Codex
 
-Use the **ChatGPT desktop app** — the Codex section of it, which is where plugins live now.
-The browser at chatgpt.com can only browse already-installed plugins; it has no marketplace
-option.
+**For a whole workspace, an admin does this once.** At **chatgpt.com → admin → Plugins →
+Marketplaces → Add → Import marketplace**, enter
+`https://github.com/breakthroughsales/plugin` and leave **Path** and **Branch** empty. Every
+member then gets the plugin under the tab named after the workspace, with no setup of their
+own. The import re-syncs once a day; the gear on the row has **Sync now** for when you need
+a release immediately.
+
+**For one person,** use the **ChatGPT desktop app** — the Codex section of it, which is where
+plugins live now. The browser at chatgpt.com can only browse already-installed plugins; it
+has no marketplace option.
 
 1. **Plugins** in the left nav.
 2. **Add** (top right) → **Add a marketplace**.
@@ -148,8 +162,46 @@ Keys are scoped to a single Breakthrough seat and can be revoked from the same p
 **"Repository not found" when adding the marketplace.** Check the owner. It is
 `breakthroughsales/plugin`; `breakthrough/plugin` does not exist.
 
-**A teammate has it and you don't see it.** Marketplaces are added per account, not per
-company. Add it yourself with the steps above.
+**A teammate has it and you don't see it.** Adding a marketplace is normally per account,
+not per company, so add it yourself with the steps above. The exception is a ChatGPT
+workspace whose admin has imported it — there it arrives without you doing anything, and if
+it has not, ask the admin rather than adding your own copy, since two sources registering a
+plugin of the same name collide.
+
+**"Failed to add marketplace" in Claude Desktop.** Usually stale local state, not a problem
+with the repository. Claude Desktop caches the marketplace list and does not notice changes
+made on claude.ai until it restarts, so it can refuse an add that collides with a
+registration the server no longer has. Quit and reopen Claude Desktop, then look before you
+add — the plugin may already be there. Marketplaces are stored per account, not per device,
+so adding on either surface is enough for both.
+
+**ChatGPT or Codex shows an older version than the repository.** A ChatGPT workspace can
+import this marketplace itself, and that import **syncs once a day** — so the workspace
+trails every release by up to 24 hours. A workspace admin can force it:
+**chatgpt.com → admin → Plugins → Marketplaces → the gear on the row → Sync now**.
+
+To tell which copy you have, open `~/.codex/plugins/cache/`. A plugin under
+`workspace-directory/` came from your workspace import — it carries a `remote_plugin_id`
+in `.codex-remote-plugin-install.json` and a generated `.codex-plugin/` directory that this
+repository does not ship. A plugin installed from the marketplace directly is a plain git
+clone under `~/.codex/.tmp/marketplaces/`, whose `.codex-marketplace-install.json` names the
+source repository and the exact revision. The two are independent: updating one does not
+update the other. Both can sit in the caches at once, but they do not both take effect —
+they register the same plugin name, so the second one added is the one that appears to do
+nothing. Keep one source, which is why a workspace member should ask their admin rather
+than adding a direct copy.
+
+**A ChatGPT workspace import stops syncing after the source repository is renamed.** It
+fails with `GITHUB_FETCH_FAILED` and the row shows "Needs attention". GitHub's rename
+redirect does not save you here: `git` and `raw.githubusercontent.com` follow it, but the
+REST API answers `301` and this importer does not follow that. Waiting will not fix it —
+the import has to be deleted and re-added against the current name. There is no field to
+edit the source in place.
+
+**"Source manifest was not found at any supported path" when importing.** Leave **Path**
+and **Branch, tag, or commit** empty. "Repository root" is the label an existing import
+displays for an empty path, not a value to type — typing it makes the importer look under a
+literal `Repository root/` directory and every manifest path misses.
 
 **`421` from `/mcp` while `/health` returns `200`.** Not an auth failure — the request
 is being rejected before it reaches authentication. Report it to the Breakthrough team

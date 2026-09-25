@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "breakthrough",
   "displayName": "Breakthrough",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "description": "Connects your AI assistant (like Claude, Codex or Cursor) to a living playbook distilled from your sales calls, so it always has the right context and knows what works best across your organization, without you having to manage any of it yourself.",
   "author": {
     "name": "Breakthrough"
@@ -15,5 +15,24 @@
     "breakthrough",
     "mcp",
     "crm"
-  ]
+  ],
+  "interface": {
+    "displayName": "Breakthrough",
+    "shortDescription": "Your sales playbook, wherever you work.",
+    "longDescription": "Connects your assistant to a living playbook distilled from your sales calls, so it drafts and answers with the context and the approach that actually works across your organization. Reads contacts, companies, call transcripts and your playbook from your own Breakthrough organization.",
+    "developerName": "Breakthrough",
+    "category": "Sales",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Draft a follow-up email after my last call",
+      "What are the open questions on this account?",
+      "Write a LinkedIn message to this prospect"
+    ],
+    "websiteURL": "https://breakthroughsales.io",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  }
 }
