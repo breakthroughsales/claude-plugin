@@ -11,6 +11,36 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.20.1] - 2026-09-25
+
+### Fixed
+
+- Install steps checked against each app's live dialogs and made explicit. The README now
+  says the marketplace is a GitHub repository, uses its full URL in every app's form (Cursor
+  rejects the `owner/repo` shorthand) and names the field each value goes in
+  (Claude's **URL**, ChatGPT's **Source**, Cursor's **Repository**). Claude's **Add from a
+  repository** choice gets its own step, Cursor gains the missing **Customize** hop, its
+  **Scope** and **Import** steps and the final **Add to Cursor**, the ChatGPT workspace-admin path loses a **Plugins** hop
+  that isn't there (it is **chatgpt.com/admin → Marketplaces**), and each desktop app now
+  says to quit and reopen after installing.
+
+- Cursor now shows the Breakthrough logo. Cursor reads `logo` from the marketplace entry rather
+  than the Codex `interface` block, so the entry in `marketplace.json` now carries it too, and
+  the validation script allows that one extra field.
+
+- Cursor can sign in. Cursor tried to register itself with our login server, which refuses
+  that by design, so its MCP connection failed with "Policy 'Trusted Hosts' rejected request".
+  A Cursor-only manifest, `.cursor-plugin/plugin.json`, now tells Cursor to use the existing
+  `breakthrough-mcp` client instead; Cursor desktop signs in on `http://localhost:8787/callback`,
+  which that client already allows. Claude and Codex don't read that file.
+
+- The ChatGPT desktop steps get back the **Install plugin** step after **Add marketplace**:
+  adding a marketplace only registers it, and the earlier rewrite had dropped the install.
+  Cursor's **Team** scope is described as making the plugin available to the team (the admin
+  chooses whether it is optional, on by default or required) rather than installing it for
+  everyone, and the overview and teammate troubleshooting now list a Cursor team alongside a
+  ChatGPT workspace.
+
 ## [0.20.0] - 2026-09-25
 
 ### Added

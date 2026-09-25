@@ -9,13 +9,14 @@ it never posts, sends, or publishes anything on your behalf.
 
 ## Install
 
-The plugin is distributed through the public marketplace repository
+The plugin is distributed through the public GitHub marketplace repository
 [`breakthroughsales/plugin`](https://github.com/breakthroughsales/plugin). Adding that
 marketplace is normally a per-account step, so each person does it once — a teammate having
 it does not put it on your account.
 
-The exception is a **ChatGPT workspace**, where an admin can import the marketplace once for
-everyone (see below). That import is the only route here that covers a whole team.
+The exceptions are a **ChatGPT workspace**, where an admin can import the marketplace once for
+everyone (see below), and a **Cursor team**, where an admin can make it available to the whole
+team.
 
 Skills and tools install together wherever the host supports plugins — Claude, ChatGPT/Codex
 and Cursor. Claude works either way, desktop or web. ChatGPT has one catch: **chatgpt.com in
@@ -26,11 +27,13 @@ install is local to that machine and does not reach your account or the browser.
 ### Claude Desktop and claude.ai
 
 1. **Customize** in the left nav, then the **Plugins** tab.
-2. **Add** (top right) → **Add marketplace** → **Add from a repository**.
-3. In **URL**, enter `breakthroughsales/plugin`, then **Sync**.
-4. Breakthrough installs from the marketplace on its own, which takes a few seconds. If it
+2. **Add** (top right) → **Add marketplace**.
+3. **Add from a repository** (not **Browse Anthropic sources**).
+4. In **URL**, enter `https://github.com/breakthroughsales/plugin`, then **Sync**.
+5. Breakthrough installs from the marketplace on its own, which takes a few seconds. If it
    has not appeared under **Yours** after a minute, open **Discover** and click **Add** on
    the Breakthrough card.
+6. In Claude Desktop, quit and reopen the app so the change takes effect.
 
 To check which release you are on, **Add** → **Manage marketplaces** shows the exact commit
 it last synced. Compare it against the newest commit on
@@ -47,8 +50,8 @@ Or interactively: `/plugin marketplace add breakthroughsales/plugin`, then `/plu
 
 ### ChatGPT and Codex
 
-**For a whole workspace, an admin does this once.** At **chatgpt.com → admin → Plugins →
-Marketplaces → Add → Import marketplace**, enter
+**For a whole workspace, an admin does this once.** At **chatgpt.com/admin → Marketplaces →
+Add → Import marketplace**, enter
 `https://github.com/breakthroughsales/plugin` and leave **Path** and **Branch** empty. Every
 member then gets the plugin under the tab named after the workspace, with no setup of their
 own. The import re-syncs once a day; the gear on the row has **Sync now** for when you need
@@ -60,7 +63,11 @@ has no marketplace option.
 
 1. **Plugins** in the left nav.
 2. **Add** (top right) → **Add a marketplace**.
-3. Enter `breakthroughsales/plugin`, then install Breakthrough from the list.
+3. In **Source**, enter `https://github.com/breakthroughsales/plugin`, leave **Git ref** and
+   **Sparse paths** empty, then **Add marketplace**.
+4. Open the **Breakthrough** tab, click **Breakthrough**, then **Install plugin**. Adding the
+   marketplace only registers it; this step installs the plugin.
+5. Quit and reopen the ChatGPT desktop app so the change takes effect.
 
 Or from the Codex CLI, for that machine only — both commands are needed, the first just
 registers the marketplace and leaves the plugin uninstalled:
@@ -87,8 +94,13 @@ Business, Enterprise or Edu).
 
 ### Cursor
 
-**Plugins** → **+ Add** → **From GitHub Repository**, then enter
-`breakthroughsales/plugin`.
+1. **Customize** in the left nav, then **Plugins**.
+2. **+ Add** → **From GitHub Repository**.
+3. In **Repository**, enter `https://github.com/breakthroughsales/plugin`.
+4. Set **Scope** to **User** for just you, or **Team** to make it available to your Cursor
+   team, then **Import**.
+5. Open **Breakthrough** and click **Add to Cursor**.
+6. Quit and reopen Cursor so the change takes effect.
 
 Cursor bundles rules, skills, subagents, commands, MCP servers and hooks into one
 installable package, so the skills and the MCP server arrive together as they do on Claude
@@ -163,10 +175,10 @@ Keys are scoped to a single Breakthrough seat and can be revoked from the same p
 `breakthroughsales/plugin`; `breakthrough/plugin` does not exist.
 
 **A teammate has it and you don't see it.** Adding a marketplace is normally per account,
-not per company, so add it yourself with the steps above. The exception is a ChatGPT
-workspace whose admin has imported it — there it arrives without you doing anything, and if
-it has not, ask the admin rather than adding your own copy, since two sources registering a
-plugin of the same name collide.
+not per company, so add it yourself with the steps above. The exceptions are a ChatGPT
+workspace or Cursor team whose admin has added it — there it arrives without you adding the
+marketplace yourself, and if it has not, ask the admin rather than adding your own copy, since
+two sources registering a plugin of the same name collide.
 
 **"Failed to add marketplace" in Claude Desktop.** Usually stale local state, not a problem
 with the repository. Claude Desktop caches the marketplace list and does not notice changes
@@ -178,7 +190,7 @@ so adding on either surface is enough for both.
 **ChatGPT or Codex shows an older version than the repository.** A ChatGPT workspace can
 import this marketplace itself, and that import **syncs once a day** — so the workspace
 trails every release by up to 24 hours. A workspace admin can force it:
-**chatgpt.com → admin → Plugins → Marketplaces → the gear on the row → Sync now**.
+**chatgpt.com/admin → Marketplaces → the gear on the row → Sync now**.
 
 To tell which copy you have, open `~/.codex/plugins/cache/`. A plugin under
 `workspace-directory/` came from your workspace import — it carries a `remote_plugin_id`
