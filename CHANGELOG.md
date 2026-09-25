@@ -11,6 +11,30 @@ cut by hand. (1.0.0–1.3.0 were published under those numbers by mistake on
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-09-25
+
+### Changed
+
+- The public repository is now `breakthroughsales/plugin`, renamed from `claude-plugin`.
+  One repository serves every assistant: Codex reads the same marketplace file Claude does,
+  so the old name was misleading for anyone not on Claude. GitHub redirects the old name,
+  and nothing should ever be created at it — that would break the redirect for existing
+  installs.
+- Description is now assistant-neutral ("your AI assistant, like Claude, Codex or Cursor"),
+  since the same package installs on all three from one repository.
+- README install steps are the verified click paths, not paraphrases: Claude
+  (Customize → Plugins → Add → Add marketplace → Add from a repository → Sync), ChatGPT and
+  Codex (desktop app → Plugins → Add → Add a marketplace) and Cursor (Plugins → + Add →
+  From GitHub Repository).
+- ChatGPT has one surface limit worth stating plainly: chatgpt.com in a browser has no
+  marketplace option at all, and the **desktop app is the only route to a plugin that shows
+  up in the browser**, because that install is scoped to your ChatGPT account.
+- The Codex CLI is documented as a separate, machine-local route. It needs both
+  `codex plugin marketplace add` and `codex plugin add` — the first only registers the
+  marketplace and leaves the plugin uninstalled — and it writes to the local `CODEX_HOME`,
+  so it never reaches your ChatGPT account or chatgpt.com.
+- Antigravity dropped — untested, and not a surface we support.
+
 ## [0.18.0] - 2026-09-23
 
 ### Added
